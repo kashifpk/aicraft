@@ -139,10 +139,13 @@ The **trajectory directory** contains everything Harbor captured: the ATIF `traj
 
 ## Limitations
 
-- **First run per agent is slow** — Harbor builds the task environment image and (per current Harbor 0.4 behavior) re-installs the agent CLI inside a fresh container on every trial. claude-code's install path is ~50 seconds; subsequent runs hit the cached image but still re-install the CLI inside.
-- **Rootless Podman + claude-code DNS quirk** — Harbor's `exec_as_agent` step inside the agent install loses DNS in rootless Podman, manifesting as a misleading `Could not resolve host: claude.ai`. Docker works. Tracked: https://github.com/harbor-framework/harbor (no specific issue filed for this yet).
-- **`final_text` for non-ATIF agents** — agents that don't set `SUPPORTS_ATIF=True` may produce an empty `final_text`. The trajectory directory still has the full record.
-- **Codex requires explicit `model`** — Harbor's codex agent has no default. aicraft pre-validates this in <1s; for other agents, `model=None` is allowed and Harbor's defaults apply.
+See [GOTCHAS.md](./GOTCHAS.md) for the full list with reproduction steps and workarounds. Highlights:
+
+- **First run per agent is slow** — Harbor 0.4 re-installs the agent CLI in a fresh container on every trial (~45–55s for claude-code/codex). Image build is cached; container is fresh.
+- **Rootless Podman + claude-code** — the agent runs fine, but trajectory ingestion fails reading session JSONL files (claude-code writes them at `0600`, and rootless Podman's userns mapping makes them unreadable from the host). Use Docker for claude-code, or other agents (codex, aider, nop) on Podman — they're unaffected.
+- **`final_text` for non-ATIF agents** — may be empty; the trajectory directory still has the full record.
+- **Codex requires an explicit `--model`** — Harbor's codex agent has no default. aicraft pre-validates this in <1s.
+- **`--provider` is OpenAI-protocol only** — claude-code (Anthropic protocol) needs `ANTHROPIC_BASE_URL` + `ANTHROPIC_API_KEY` set manually for gateways like OpenRouter.
 
 ## Related issues filed upstream
 

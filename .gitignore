@@ -24,3 +24,8 @@ trajectories/
 # Claude
 .claude-work/
 .claude/
+
+# direnv local env (provider keys, etc.)
+.env
+.envrc.local
+.direnv/
