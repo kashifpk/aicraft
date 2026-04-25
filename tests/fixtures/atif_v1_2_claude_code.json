@@ -1,0 +1,74 @@
+{
+  "schema_version": "ATIF-v1.2",
+  "session_id": "6ea0bd4a-b3f0-4b01-bca2-1aab2e2263f0",
+  "agent": {
+    "name": "claude-code",
+    "version": "2.1.119",
+    "model_name": "claude-sonnet-4-6",
+    "extra": {
+      "cwds": [
+        "/workspace"
+      ],
+      "git_branches": [
+        "HEAD"
+      ]
+    }
+  },
+  "steps": [
+    {
+      "step_id": 1,
+      "timestamp": "2026-04-24T15:28:11.107Z",
+      "source": "user",
+      "message": "List three interesting uses for the word 'zither'. Keep each under 20 words.",
+      "extra": {
+        "is_sidechain": false
+      }
+    },
+    {
+      "step_id": 2,
+      "timestamp": "2026-04-24T15:28:14.428Z",
+      "source": "agent",
+      "model_name": "claude-sonnet-4-6",
+      "message": "1. **Musical**: She played a haunting zither melody that echoed through the mountain village at dusk.\n\n2. **Wordplay**: \"Zither\" scores exceptionally well in Scrabble, earning big points with that rare Z tile.\n\n3. **Metaphorical**: His nerves were a zither, each string vibrating with anxious anticipation before the verdict.",
+      "metrics": {
+        "prompt_tokens": 15566,
+        "completion_tokens": 90,
+        "cached_tokens": 10674,
+        "extra": {
+          "cache_creation_input_tokens": 4890,
+          "cache_read_input_tokens": 10674,
+          "server_tool_use": {
+            "web_search_requests": 0,
+            "web_fetch_requests": 0
+          },
+          "service_tier": "standard",
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 4890
+          },
+          "inference_geo": "",
+          "iterations": [],
+          "speed": "standard"
+        }
+      },
+      "extra": {
+        "stop_reason": "end_turn",
+        "cwd": "/workspace",
+        "is_sidechain": false
+      }
+    }
+  ],
+  "final_metrics": {
+    "total_prompt_tokens": 15566,
+    "total_completion_tokens": 90,
+    "total_cached_tokens": 10674,
+    "total_steps": 2,
+    "extra": {
+      "service_tiers": [
+        "standard"
+      ],
+      "total_cache_creation_input_tokens": 4890,
+      "total_cache_read_input_tokens": 10674
+    }
+  }
+}

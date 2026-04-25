@@ -1,0 +1,65 @@
+[project]
+name = "aicraft"
+version = "0.1.0"
+description = "Run coding agents (Claude Code, Codex, Aider, OpenHands, …) against prompts in container sandboxes via Harbor"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [
+    { name = "Kashif Iftikhar" },
+]
+keywords = ["agent", "llm", "harbor", "sandbox", "coding-agent"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+dependencies = [
+    "harbor>=0.4,<0.5",
+    "cyclopts>=4.0.0",
+    "pydantic>=2.10.0",
+    # litellm arrives here as a transitive dep of harbor. Pinned at the
+    # floor because versions 1.82.7 and 1.82.8 (live on PyPI for ~40min
+    # on 2026-03-24) were trojanized to exfiltrate cloud creds, SSH keys,
+    # and k8s secrets. 1.83.0 is the clean rebuild. Never downgrade.
+    # Refs: https://docs.litellm.ai/blog/security-update-march-2026
+    "litellm>=1.83.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
+    "ruff>=0.8.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/kashifpk/aicraft"
+Issues = "https://github.com/kashifpk/aicraft/issues"
+Source = "https://github.com/kashifpk/aicraft"
+
+[project.scripts]
+aicraft = "aicraft.cli:app"
+
+[build-system]
+requires = ["setuptools>=75.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["aicraft*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
