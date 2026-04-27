@@ -1,6 +1,6 @@
 # Gotchas
 
-Operational quirks worth knowing before you debug. Most of these are inherited from Harbor 0.4 — aicraft documents and works around them where it can.
+Operational quirks worth knowing before you debug. Most of these are inherited from the underlying Harbor framework — aicraft documents and works around them where it can.
 
 ## Container runtimes
 
@@ -76,7 +76,7 @@ OpenRouter accepts short forms when unambiguous, so most runs succeed. If you ro
 
 ### Per-trial agent install (~45–55 s)
 
-Harbor 0.4 has no "is the agent CLI already on PATH" check — it re-installs the agent into a fresh container on every trial. Image build is cached; container is fresh. Accepted as inherent cost for now.
+Harbor has no "is the agent CLI already on PATH" check — it re-installs the agent into a fresh container on every trial. Image build is cached; container is fresh. Accepted as inherent cost for now.
 
 ### Cold start (~25 s) even for `nop`
 
@@ -94,7 +94,7 @@ aicraft extracts the agent's textual reply from the standardized ATIF trajectory
 
 ### ATIF schema varies per agent
 
-codex emits ATIF v1.5 (rich — has `tool_calls`, `observation`, `model_name`); claude-code on Harbor 0.4 emits ATIF v1.2 (`step_id`, `timestamp`, `source`, `message` only). aicraft's `_extract_final_text` uses only v1.2 fields, so it works for both. Anyone parsing tool calls or edit classifications needs to dispatch on `schema_version`.
+codex emits ATIF v1.5 (rich — has `tool_calls`, `observation`, `model_name`); claude-code emits ATIF v1.2 (`step_id`, `timestamp`, `source`, `message` only). aicraft's `_extract_final_text` uses only v1.2 fields, so it works for both. Anyone parsing tool calls or edit classifications needs to dispatch on `schema_version`.
 
 ## Mounts
 

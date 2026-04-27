@@ -16,7 +16,6 @@ aicraft flips the abstraction:
 - ATIF-aware final-text extraction (works across any agent that emits ATIF)
 - Mount allowlist enforcement (refuses to mount paths outside configured roots)
 - Provider presets (`--provider openrouter` etc.) for routing OpenAI-protocol agents through aggregator gateways
-- Workarounds for current Harbor 0.4 quirks (Codex `OPENAI_BASE_URL` propagation)
 
 It's the opinionated, ad-hoc-friendly subset of Harbor — like `gh` is to a `git push origin <branch> && curl github.com/...` chain.
 
@@ -141,7 +140,7 @@ The **trajectory directory** contains everything Harbor captured: the ATIF `traj
 
 See [GOTCHAS.md](./GOTCHAS.md) for the full list with reproduction steps and workarounds. Highlights:
 
-- **First run per agent is slow** — Harbor 0.4 re-installs the agent CLI in a fresh container on every trial (~45–55s for claude-code/codex). Image build is cached; container is fresh.
+- **First run per agent is slow** — Harbor re-installs the agent CLI in a fresh container on every trial (~45–55s for claude-code/codex). Image build is cached; container is fresh.
 - **Rootless Podman + claude-code** — the agent runs fine, but trajectory ingestion fails reading session JSONL files (claude-code writes them at `0600`, and rootless Podman's userns mapping makes them unreadable from the host). Use Docker for claude-code, or other agents (codex, aider, nop) on Podman — they're unaffected.
 - **`final_text` for non-ATIF agents** — may be empty; the trajectory directory still has the full record.
 - **Codex requires an explicit `--model`** — Harbor's codex agent has no default. aicraft pre-validates this in <1s.

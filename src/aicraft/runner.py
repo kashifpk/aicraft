@@ -18,7 +18,6 @@ from pathlib import Path
 from textwrap import dedent
 from typing import Any
 
-from aicraft import _harbor_patches
 from aicraft.mount import load_allowed_roots, validate_mounts
 from aicraft.types import AgentConfig, AgentResult
 
@@ -97,11 +96,6 @@ class AgentRunner:
                 f"Pass model= (e.g., model='gpt-5')."
             )
         validate_mounts(config.mounts, self._allowed_roots)
-
-        # Apply Harbor workarounds late — so they pick up env vars set by
-        # the caller (e.g. provider presets) rather than whatever was set
-        # when aicraft was first imported.
-        _harbor_patches.apply_all()
 
         run_id = f"aicraft-{uuid.uuid4().hex[:12]}"
         logger.info("Starting agent run %s (agent=%s model=%s)", run_id, config.agent, config.model)

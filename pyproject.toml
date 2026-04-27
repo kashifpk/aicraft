@@ -1,6 +1,6 @@
 [project]
 name = "aicraft"
-version = "0.1.0"
+version = "0.1.1"
 description = "Run coding agents (Claude Code, Codex, Aider, OpenHands, …) against prompts in container sandboxes via Harbor"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -19,7 +19,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "harbor>=0.4,<0.5",
+    "harbor>=0.5,<0.6",
     "cyclopts>=4.0.0",
     "pydantic>=2.10.0",
     # litellm arrives here as a transitive dep of harbor. Pinned at the
