@@ -71,6 +71,9 @@ aicraft run -a claude-code "..." \
   --timeout 1800 \
   --output ./result.json
 
+# Bump the container memory limit for memory-hungry agents/models
+aicraft run -a claude-code "..." --memory-mb 8192
+
 # Route an OpenAI-protocol agent through OpenRouter for open-weight models
 OPENROUTER_API_KEY=sk-or-... aicraft run \
   -a codex -M deepseek/deepseek-chat --provider openrouter \

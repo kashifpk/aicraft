@@ -104,7 +104,7 @@ class AgentRunner:
         # location, but a throwaway temp dir is simpler — trajectories are
         # preserved under trajectory_dir, and that's the only output we care
         # about keeping.
-        with _temp_task_dir(prompt=config.prompt) as task_dir:
+        with _temp_task_dir(prompt=config.prompt, memory_mb=config.memory_mb) as task_dir:
             trial_config = _build_trial_config(
                 task_dir=task_dir,
                 trials_dir=self._trajectory_dir,
@@ -167,8 +167,9 @@ class AgentRunner:
 class _temp_task_dir:
     """Context manager that creates a Harbor-compatible minimal task directory."""
 
-    def __init__(self, *, prompt: str) -> None:
+    def __init__(self, *, prompt: str, memory_mb: int) -> None:
         self._prompt = prompt
+        self._memory_mb = memory_mb
         self._path: Path | None = None
 
     def __enter__(self) -> Path:
@@ -178,7 +179,7 @@ class _temp_task_dir:
         (base / "environment").mkdir()
         (base / "environment" / "Dockerfile").write_text(_DEFAULT_DOCKERFILE)
         (base / "instruction.md").write_text(self._prompt.strip() + "\n")
-        (base / "task.toml").write_text(dedent("""\
+        (base / "task.toml").write_text(dedent(f"""\
             version = "1.0"
 
             [metadata]
@@ -192,7 +193,7 @@ class _temp_task_dir:
             [environment]
             build_timeout_sec = 600.0
             cpus = 1
-            memory_mb = 4096
+            memory_mb = {self._memory_mb}
             storage_mb = 10240
         """))
         self._path = base

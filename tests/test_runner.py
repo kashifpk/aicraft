@@ -10,6 +10,7 @@ from aicraft.runner import (
     MissingRequiredModelError,
     _extract_final_text,
     _resolve_trajectory_dir,
+    _temp_task_dir,
 )
 
 
@@ -29,6 +30,26 @@ class TestResolveTrajectoryDir:
         result = _resolve_trajectory_dir()
         assert "~" not in str(result)
         assert str(result).endswith("test-trajectories")
+
+
+class TestTempTaskDir:
+    """The synthesized task.toml has to thread caller knobs into Harbor."""
+
+    def test_default_memory_is_4096(self) -> None:
+        with _temp_task_dir(prompt="hello", memory_mb=4096) as task_dir:
+            toml = (task_dir / "task.toml").read_text()
+        assert "memory_mb = 4096" in toml
+
+    def test_memory_override_is_written(self) -> None:
+        with _temp_task_dir(prompt="hello", memory_mb=8192) as task_dir:
+            toml = (task_dir / "task.toml").read_text()
+        assert "memory_mb = 8192" in toml
+        assert "memory_mb = 4096" not in toml
+
+    def test_cleanup_removes_task_dir(self) -> None:
+        with _temp_task_dir(prompt="hello", memory_mb=4096) as task_dir:
+            assert task_dir.exists()
+        assert not task_dir.exists()
 
 
 class TestExtractFinalText:

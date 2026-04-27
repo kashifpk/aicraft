@@ -1,6 +1,6 @@
 [project]
 name = "aicraft"
-version = "0.1.1"
+version = "0.1.2"
 description = "Run coding agents (Claude Code, Codex, Aider, OpenHands, …) against prompts in container sandboxes via Harbor"
 readme = "README.md"
 requires-python = ">=3.12"

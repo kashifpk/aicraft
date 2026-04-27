@@ -35,6 +35,11 @@ class AgentConfig(BaseModel):
     mounts: list[MountSpec] = Field(default_factory=list)
     env: dict[str, str] = Field(default_factory=dict, description="Passed through to the agent")
     timeout_s: int = 600
+    memory_mb: int = Field(
+        default=4096,
+        ge=64,
+        description="Container memory limit in MB. Bump for memory-hungry agents/models.",
+    )
 
     model_config = ConfigDict(extra="forbid")
 

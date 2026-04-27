@@ -134,6 +134,13 @@ def run(
     timeout: Annotated[
         int, cyclopts.Parameter(name=["--timeout", "-t"], help="Agent wall-clock timeout in seconds.")
     ] = 600,
+    memory_mb: Annotated[
+        int,
+        cyclopts.Parameter(
+            name=["--memory-mb"],
+            help="Container memory limit in MB. Bump for memory-hungry agents/models.",
+        ),
+    ] = 4096,
     provider: Annotated[
         str | None,
         cyclopts.Parameter(
@@ -210,6 +217,7 @@ def run(
         mounts=mounts,
         env=env_dict,
         timeout_s=timeout,
+        memory_mb=memory_mb,
     )
 
     runner = AgentRunner(trajectory_dir=trajectory_dir)
