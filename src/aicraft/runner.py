@@ -228,7 +228,7 @@ def _build_trial_config(
         TrialVerifierConfig,
     )
 
-    mounts_json = [
+    mount_binds = [
         {
             "type": "bind",
             "source": str(m.host.resolve()),
@@ -237,6 +237,16 @@ def _build_trial_config(
         }
         for m in config.mounts
     ]
+
+    # Harbor 0.18 renamed EnvironmentConfig.mounts_json → mounts (same
+    # bind-dict shape, coerced to ServiceVolumeConfig); the old name
+    # survives only as a deprecation shim. Feature-detect the field so
+    # one codebase spans harbor 0.5 through 0.18+.
+    mounts_field = (
+        "mounts"
+        if "mounts" in TrialEnvironmentConfig.model_fields
+        else "mounts_json"
+    )
 
     return TrialConfig(
         task=TrialTaskConfig(path=task_dir),
@@ -250,7 +260,7 @@ def _build_trial_config(
         ),
         environment=TrialEnvironmentConfig(
             type=EnvironmentType.DOCKER,
-            mounts_json=mounts_json or None,
+            **{mounts_field: mount_binds or None},
         ),
         # The verifier is disabled — aicraft is pure "run the agent,
         # capture output". Verification/rewards belong to harbor-rewardkit
